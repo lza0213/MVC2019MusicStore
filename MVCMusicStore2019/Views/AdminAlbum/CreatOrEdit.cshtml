@@ -1,0 +1,103 @@
+﻿
+
+@model MVCMusicStore2019.ViewModels.MusicModel.AlbumViewModel
+
+@{
+    ViewBag.Title = "音乐编辑系统管理员页面";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3>@ViewBag.Title</h3>
+
+<div>
+    <input type="hidden" id="CurrentGenreSelectedId" value="@Model.GenreId" />@*在修改时会用到*@
+    <input type="hidden" id="CurrentArtistSelectedId" value="@Model.ArtistId" />
+    <input type="hidden" id="CurrentAlbumTypeSelectedId" value="@Model.AlbumTypeId" />
+
+</div>
+
+
+@Html.ValidationSummary(true,"",new { @class="text-danger"})
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()//防伪造脚本攻击，CSRF
+     <div class="form-group">
+         @Html.HiddenFor(x=>x.Id)
+         @Html.LabelFor(x => x.Name, new { @class = "col-md-2 control-label " })
+         @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+     </div>
+     <div class="form-group">
+       @Html.LabelFor(x => x.Description, new { @class = "col-md-2 control-label " })
+       @Html.TextBoxFor(x => x.Description, new { @class = "form-control" })
+      </div>
+
+      //=========流派下拉菜单实现===========//
+
+      <div class="form-group">
+          @Html.LabelFor(x=>x.GenreName,new { @class="col-md-2 control-label"})
+          <div id="GenreSelectList"></div>@*在此通过Ajax定义selectlist*@
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.ArtistName, new { @class = "col-md-2 control-label" })
+            <div id="ArtistSelectList"></div>@*在此通过Ajax定义selectlist*@
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.AlbumTypeName, new { @class = "col-md-2 control-label" })
+            <div id="AlbumTypeSelectList"></div>@*在此通过Ajax定义selectlist*@
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Theprice, new { @class = "col-md-2 control-label " })
+            @Html.TextBoxFor(x => x.Theprice, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Releasetime, new { @class = "col-md-2 control-label " })
+            @Html.TextBoxFor(x => x.Releasetime, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Language, new { @class = "col-md-2 control-label " })
+            @Html.TextBoxFor(x => x.Language, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Issuer, new { @class = "col-md-2 control-label " })
+            @Html.TextBoxFor(x => x.Issuer, new { @class = "form-control" })
+        </div>
+
+        //========图片上传
+        <div class="form-group">
+            @Html.LabelFor(x=>x.UrlString,new { @class="col-md-2 control-label"})
+            @Html.TextBoxFor(x => x.UrlString, new { @class = "form-control" })
+            <div id="FormContent">
+                <div id="FormUpload" enctype="multipart/data" method="post">
+                    <span class="btn btn-success fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span>添加图片</span>
+                        <input type="file" name="UploadedFile" id="UploadedFile"onchange="singleFileSelected()"/>
+                    </span> 
+                    <button class="btn btn-primary start" type="button"id="Submit_btn" onclick="upFileImg()">
+                        <i class="glyphicon glyphicon-upload"></i>
+                        <span>保存图片</span>
+                    </button>
+                </div>
+                @*=======进度条*@
+                <div class="progress CustomProgress">
+                    <div id="FileProgess" class="progress progress-bar" role="progressbar"></div>
+                </div> 
+                <div class="InfoContainer">
+                    <div id="Imagecontainer"></div>
+                    <div id="FileName" class="info"></div>
+                    <div id="FileSize" class="info"></div>
+                    <div id="FileType" class="info"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+      <button type="submit" class="btn btn-primary">@ViewBag.Operation</button>
+      @Html.ActionLink("取消", "Index", null, new { @class = "btn btn-default" })@*定义取消按钮。实现 AdminGenreController Create()/方法调用*@
+ 
+}
+@Scripts.Render("~/bundles/jquery")
+<script src="~/Scripts/MusicStore/Album.js"></script>

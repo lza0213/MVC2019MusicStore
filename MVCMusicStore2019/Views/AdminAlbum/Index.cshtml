@@ -1,0 +1,71 @@
+﻿
+@using MVCMusicStore2019.ViewModels
+@model IEnumerable<MVCMusicStore2019.ViewModels.MusicModel.AlbumViewModel>
+
+
+<h2>音乐编辑系统管理 @ViewBag.Title 页面</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        @ViewBag.Title 列表
+    </div>
+    <table class="table table-striped">
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.OrderNumber)</td>
+            <td>@Html.DisplayNameFor(model => model.Name)</td>
+            <td>@Html.DisplayNameFor(model => model.Description)</td>
+            <td>@Html.DisplayNameFor(model => model.GenreName)</td>
+            <td>@Html.DisplayNameFor(model => model.ArtistName)</td>
+            <td>@Html.DisplayNameFor(model => model.AlbumTypeName)</td>
+            <td>@Html.DisplayNameFor(model => model.Theprice)</td>
+            <td>@Html.DisplayNameFor(model => model.Releasetime)</td>
+            <td>@Html.DisplayNameFor(model => model.Language)</td>
+            <td>@Html.DisplayNameFor(model => model.Issuer)</td>
+            <th></th>
+        </tr>
+        @if (Model == null)
+        {
+            <tr><td colspan="3" class="text-center">没有用户列表数据</td></tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    @Html.HiddenFor(modelItem => item.Id)
+                    <td>@Html.DisplayFor(modelItem => item.OrderNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@Html.DisplayFor(model => item.GenreName)</td>
+                    <td>@Html.DisplayFor(model => item.ArtistName)</td>
+                    <td>@Html.DisplayFor(model => item.AlbumTypeName)</td>
+                    <td>@Html.DisplayFor(model => item.Theprice)</td>
+                    <td>@Html.DisplayFor(model => item.Releasetime)</td>
+                    <td>@Html.DisplayFor(model => item.Language)</td>
+                    <td>@Html.DisplayFor(model => item.Issuer)</td>
+                    <td>
+                        <div>
+
+                            @using (Html.BeginForm("Delete", "AdminAlbum", new { id = item.Id }))
+
+                            {
+                                @Html.ActionLink("编辑", "CreatOrEdit", new { id = item.Id }, new { @class = "btn btn-primar btn-xs" })
+
+                                <button class="btn btn-danger btn-xs" onclick="JavaScript: return confirm('确定要删除吗？')" type="submit">
+                                    删除
+                                </button>
+                            }
+
+
+                        </div>
+
+
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+</div>
+@Html.ActionLink("新建", "CreatOrEdit", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("取消", "Index", "Home", null, new { @class = "btn btn-default" })
